@@ -1,5 +1,6 @@
 package com.hcl.matrimony.service;
 
+import java.util.Optional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,6 +8,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 
 import com.hcl.matrimony.dto.ApiResponse;
 import com.hcl.matrimony.dto.PersonDetailsRequest;
@@ -28,11 +30,10 @@ public class MatrimonyServiceImpl implements MatrimonyService {
 	private static final Logger logger = LogManager.getLogger(MatrimonyServiceImpl.class);
 	private static final String SUCCESS = "SUCCESS";
 	private static final String FAILURE = "FAILURE";
-	
 
 	@Autowired
 	private PersonDetailsReposioty personDetailsReposioty;
-	
+
 	@Autowired
 	private UserRepository userRepository;
 	
@@ -50,9 +51,9 @@ public class MatrimonyServiceImpl implements MatrimonyService {
 
 				PersonDetails persondetails = personDetailsReposioty.findByEmailId(request.getEmailId());
 
-				if (persondetails.getEmailId()!= null ) {			
+				if (persondetails.getEmailId() != null) {
 					throw new MatrimonyServiceException("Email id is already exist");
-				
+
 				}
 
 				PersonDetails details = new PersonDetails();
@@ -73,7 +74,7 @@ public class MatrimonyServiceImpl implements MatrimonyService {
 				user.setEmailId(request.getEmailId());
 				user.setPassword(request.getPassword());
 				user.setUserName(request.getName());
-				
+
 				userRepository.save(user);
 
 				response.setStatus(SUCCESS);
@@ -203,5 +204,49 @@ public class MatrimonyServiceImpl implements MatrimonyService {
 		return response;
 	}
 	
+
+	@Override
+	public ApiResponse login(String emailId, String password) {
+
+		ApiResponse response = null;
+		;
+		try {
+
+			response = new ApiResponse();
+
+			Optional<User> userMail = userRepository.findByEmailId(emailId);
+
+			if (!userMail.isPresent()) {
+
+				throw new MatrimonyServiceException("UserNotFound Exception");
+
+			}
+			
+			
+			Optional<User> user = userRepository.findByEmailIdAndPassword(emailId, password);
+
+			if (!user.isPresent()) {
+
+				throw new MatrimonyServiceException("Invalid credential Exception");
+			}
+
+			
+
+			response.setMessage("Login successfull");
+			response.setStatus(SUCCESS);
+			response.setStatusCode(200);
+
+		} catch (Exception e) {
+
+			response = new ApiResponse();
+			response.setMessage(e.getMessage());
+			response.setStatus(FAILURE);
+			response.setStatusCode(404);
+			logger.error(getClass().getName() + "  " + " login " + e.getMessage());
+
+		}
+
+		return response;
+	}
 
 }
