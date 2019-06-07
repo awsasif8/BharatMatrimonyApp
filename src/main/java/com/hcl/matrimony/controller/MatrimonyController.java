@@ -2,6 +2,7 @@ package com.hcl.matrimony.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.hcl.matrimony.dto.ApiResponse;
 import com.hcl.matrimony.dto.PersonDetailsRequest;
 import com.hcl.matrimony.dto.ProfileListResponse;
+import com.hcl.matrimony.dto.UpdatePersonDetailsRequest;
 import com.hcl.matrimony.service.MatrimonyService;
 
 @RestController
@@ -28,9 +30,14 @@ public class MatrimonyController {
 		return matrimonyService.registerAccount(resuest);
 	}
 	
-	@PostMapping("/getAllProfiles")
+	@GetMapping("/getAllProfiles")
 	public ProfileListResponse getAllProfiles(@RequestParam("emailId") String emailId) {
 		return matrimonyService.getAllProfiles(emailId);
+	}
+	
+	@PostMapping("/updateAccount")
+	public ApiResponse updateAccount(@RequestBody UpdatePersonDetailsRequest resuest) {
+		return matrimonyService.updatePersonalDetails(resuest);
 	}
 
 }
