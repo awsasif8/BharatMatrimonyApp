@@ -12,6 +12,7 @@ import com.hcl.matrimony.dto.ApiResponse;
 import com.hcl.matrimony.dto.PersonDetailsRequest;
 import com.hcl.matrimony.dto.PersonProfileDto;
 import com.hcl.matrimony.dto.ProfileListResponse;
+import com.hcl.matrimony.dto.UpdatePersonDetailsRequest;
 import com.hcl.matrimony.entity.PersonDetails;
 import com.hcl.matrimony.entity.User;
 import com.hcl.matrimony.repository.PersonDetailsReposioty;
@@ -124,6 +125,44 @@ public class MatrimonyServiceImpl implements MatrimonyService {
 			response.setStatus(FAILURE);
 			response.setStatusCode(401);
 			logger.error(e.getClass().getName() + " RegisterAccount " + e.getMessage());
+		}
+		return response;
+	}
+	
+	@Override
+	public ApiResponse updatePersonalDetails(UpdatePersonDetailsRequest request) {
+		ApiResponse response=null;
+		try {
+			if(request!=null) {
+				Long personId = request.getPersonId();
+				PersonDetails person = personDetailsReposioty.findByProfileId(personId);
+				if(person!=null) {
+					person.setColour(request.getColour());
+					person.setDob(request.getDob());
+					person.setEmailId(request.getEmailId());
+					person.setGender(request.getGender());
+					person.setHeight(request.getHeight());
+					person.setLanguage(request.getLanguage());
+					person.setMaritalStatus(request.getMaritalStatus());
+					person.setMobileNo(request.getMobileNo());
+					person.setName(request.getName());
+					person.setOccupation(request.getOccupation());
+					personDetailsReposioty.save(person);
+					response = new ApiResponse();
+					response.setStatus(SUCCESS);
+					response.setStatusCode(201);
+					response.setMessage("Your details successfully updated ...!");
+				}else {
+					throw new MatrimonyServiceException("Profile not found..!");
+				}
+				
+			}
+		} catch (Exception e) {
+			response = new ApiResponse();
+			response.setMessage(e.getMessage());
+			response.setStatus(FAILURE);
+			response.setStatusCode(401);
+			logger.error(e.getClass().getName() + " updatePersonalDetails " + e.getMessage());
 		}
 		return response;
 	}

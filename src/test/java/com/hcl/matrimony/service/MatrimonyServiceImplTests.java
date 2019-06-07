@@ -14,12 +14,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.hcl.matrimony.dto.ApiResponse;
 import com.hcl.matrimony.dto.PersonDetailsRequest;
 import com.hcl.matrimony.dto.PersonProfileDto;
 import com.hcl.matrimony.dto.ProfileListResponse;
+import com.hcl.matrimony.dto.UpdatePersonDetailsRequest;
 import com.hcl.matrimony.entity.PersonDetails;
 import com.hcl.matrimony.repository.PersonDetailsReposioty;
 import com.hcl.matrimony.repository.UserRepository;
@@ -115,6 +115,38 @@ public class MatrimonyServiceImplTests {
 		
 		
 	}
+	
+	@Test
+	public void updatePersonalDetailsTest() {
+		Long profileId=1L;
+		PersonDetails personDetails=new PersonDetails();
+		personDetails.setProfileId(1L);
+		personDetails.setOccupation("it");
+		personDetails.setName("uday");
+		personDetails.setLanguage("telugu");
+		personDetails.setGender("male");
+		personDetails.setColour("white");
+		personDetails.setEmailId("uday@hcl.com");
+		
+		UpdatePersonDetailsRequest request=new UpdatePersonDetailsRequest();
+		request.setPersonId(1L);
+		request.setOccupation("it");
+		request.setName("udaykumar");
+		request.setLanguage("telugu");
+		request.setGender("male");
+		request.setColour("white");
+		request.setEmailId("uday1@hcl.com");
+		
+		when(personDetailsReposioty.findByProfileId(profileId)).thenReturn(personDetails);
+		Long actual=201l;
+		ApiResponse updatePersonalDetails = matrimonyServiceImpl.updatePersonalDetails(request);
+		Long exp=Long.valueOf(""+updatePersonalDetails.getStatusCode());
+		assertEquals(exp, actual);
+		
+		
+	}
+	
+	
 	
 	
 	

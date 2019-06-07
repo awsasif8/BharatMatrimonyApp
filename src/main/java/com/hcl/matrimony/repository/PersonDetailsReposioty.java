@@ -18,4 +18,6 @@ public interface PersonDetailsReposioty  extends JpaRepository<PersonDetails, Lo
 	@Query(value="select pd from PersonDetails pd where pd.gender <> :gender")
 	public List<PersonDetails> findByGender(@Param("gender") String gender);
 	
+	public PersonDetails findByProfileId(Long profileId);
+	
 }
