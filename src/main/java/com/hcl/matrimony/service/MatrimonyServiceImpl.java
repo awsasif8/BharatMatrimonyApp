@@ -1,5 +1,6 @@
 package com.hcl.matrimony.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -9,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import com.hcl.matrimony.dto.ApiResponse;
 import com.hcl.matrimony.dto.PersonDetailsRequest;
+import com.hcl.matrimony.dto.PersonProfileDto;
+import com.hcl.matrimony.dto.ProfileListResponse;
 import com.hcl.matrimony.entity.PersonDetails;
 import com.hcl.matrimony.entity.User;
 import com.hcl.matrimony.repository.PersonDetailsReposioty;
@@ -82,5 +85,49 @@ public class MatrimonyServiceImpl implements MatrimonyService {
 
 		return response;
 	}
+	
+	@Override
+	public ProfileListResponse getAllProfiles(String emailId) {
+		logger.info("getAllProfiles is calling ...!");
+		ProfileListResponse response=null;
+		try {
+			if(emailId!=null) {
+				PersonDetails persondetails = personDetailsReposioty.findByEmailId(emailId);
+				List<PersonProfileDto> profileList=new ArrayList<>();
+				if(persondetails!=null) {
+					
+					String gender=persondetails.getGender();
+					List<PersonDetails> findByGender = personDetailsReposioty.findByGender(gender);
+					if(findByGender!=null && !findByGender.isEmpty()) {
+						findByGender.stream().forEach(person->{
+							PersonProfileDto dto=new PersonProfileDto();
+							dto.setProfileId(person.getProfileId());
+							dto.setLanguage(person.getLanguage());
+							dto.setName(person.getName());
+							dto.setOccupation(person.getOccupation());
+							profileList.add(dto);
+						});
+					}
+					response=new ProfileListResponse();
+					response.setProfilesList(profileList);
+					response.setStatus(SUCCESS);
+					response.setMessage(SUCCESS);
+					response.setStatusCode(200);
+					
+				}else {
+					throw new MatrimonyServiceException("Email id is not valid");
+				}
+			}
+			
+		} catch (Exception e) {
+			response=new ProfileListResponse();
+			response.setStatus(FAILURE);
+			response.setStatusCode(401);
+			logger.error(e.getClass().getName() + " RegisterAccount " + e.getMessage());
+		}
+		return response;
+	}
+	
+	
 
 }
