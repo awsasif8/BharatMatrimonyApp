@@ -1,6 +1,11 @@
 package com.hcl.matrimony.service;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -13,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.hcl.matrimony.dto.ApiResponse;
 import com.hcl.matrimony.dto.PersonDetailsRequest;
+import com.hcl.matrimony.dto.PersonProfileDto;
+import com.hcl.matrimony.dto.ProfileListResponse;
 import com.hcl.matrimony.entity.PersonDetails;
 import com.hcl.matrimony.repository.PersonDetailsReposioty;
 import com.hcl.matrimony.repository.UserRepository;
@@ -70,9 +77,46 @@ public class MatrimonyServiceImplTests {
 		
 		Assert.assertEquals(response.toString(),actual.toString());
 		
+	}
+	
+	@Test
+	public void getAllProfileTest() {
+		String emailId="uday@hcl.com";
+		PersonDetails personDetails=new PersonDetails();
+		personDetails.setProfileId(1L);
+		personDetails.setOccupation("it");
+		personDetails.setName("uday");
+		personDetails.setLanguage("telugu");
+		personDetails.setGender("male");
+		
+		List<PersonDetails> personList=new ArrayList<>();
+		PersonDetails personDetails1=new PersonDetails();
+		personDetails1.setProfileId(1L);
+		personDetails1.setOccupation("it");
+		personDetails1.setName("sumathi");
+		personDetails1.setLanguage("telugu");
+		personDetails1.setGender("female");
+		
+		personList.add(personDetails1);
+		
+		
+		String gender="male";
+		when(personDetailsReposioty.findByEmailId(emailId)).thenReturn(personDetails);
+		when(personDetailsReposioty.findByGender(gender)).thenReturn(personList);
+		
+		ProfileListResponse allProfiles = matrimonyServiceImpl.getAllProfiles(emailId);
+		if(allProfiles!=null) {
+			List<PersonProfileDto> profilesList = allProfiles.getProfilesList();
+			Double actual=1.0;
+			Double expected=Double.valueOf(""+profilesList.size());
+			assertEquals(expected, actual);
+		}
 		
 		
 		
 	}
+	
+	
+	
 
 }

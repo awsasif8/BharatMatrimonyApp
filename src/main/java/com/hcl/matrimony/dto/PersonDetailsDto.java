@@ -1,61 +1,35 @@
-package com.hcl.matrimony.entity;
+package com.hcl.matrimony.dto;
 
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
-@Entity
-@Table(name = "person_details")
-public class PersonDetails implements Serializable {
+public class PersonDetailsDto implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="profile_id")
 	private Long profileId;	
 	
-	@Column(name="name")
 	private String name;
 	
-	@Column(name="email_id")
 	private String emailId;
 	
 	
-	@Column(name="dob")
 	private Date dob;
 	
-	@Column(name="height")
 	private Float height;
 	
-	@Column(name="marital_status")
 	private String maritalStatus;
 	
-	@Column(name="language")
 	private String language;
 	
-	@Column(name="mobile_no")
 	private Long mobileNo;
 	
-	@Column(name="occupation")
 	private String occupation;
 	
-	@Column(name="gender")
 	private String gender;
 	
-	@Column(name="colour")
 	private String colour;
 	
-	
-
 	public Long getProfileId() {
 		return profileId;
 	}
