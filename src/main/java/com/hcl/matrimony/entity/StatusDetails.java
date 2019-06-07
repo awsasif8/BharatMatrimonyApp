@@ -16,7 +16,7 @@ public class StatusDetails implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private Long statusId;
 	
 	@Column(name="from_account")
 	private Long fromAccount;
@@ -27,12 +27,12 @@ public class StatusDetails implements Serializable {
 	@Column(name="Status")
 	private String Status;
 
-	public Long getId() {
-		return id;
+	public Long getStatusId() {
+		return statusId;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setStatusId(Long id) {
+		this.statusId = id;
 	}
 
 	public Long getFromAccount() {
