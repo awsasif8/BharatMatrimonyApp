@@ -29,6 +29,18 @@ public class PersonDetails implements Serializable {
 	private String gender;
 	private String colour;
 
+	public Long getProfileId() {
+		return profileId;
+	}
+
+	public void setProfileId(Long profileId) {
+		this.profileId = profileId;
+	}
+
+	public void setLanguage(String language) {
+		this.language = language;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -71,10 +83,6 @@ public class PersonDetails implements Serializable {
 
 	public String getLanguage() {
 		return language;
-	}
-
-	public void setLunguage(String language) {
-		this.language = language;
 	}
 
 	public Long getMobileNo() {
