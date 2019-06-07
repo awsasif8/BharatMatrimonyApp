@@ -6,18 +6,22 @@ import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.criterion.DetachedCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
 import com.hcl.matrimony.dto.ApiResponse;
+import com.hcl.matrimony.dto.GetStatusList;
+import com.hcl.matrimony.dto.GetStatusResponse;
 import com.hcl.matrimony.dto.PersonDetailsRequest;
 import com.hcl.matrimony.dto.PersonProfileDto;
 import com.hcl.matrimony.dto.ProfileListResponse;
 import com.hcl.matrimony.dto.UpdatePersonDetailsRequest;
 import com.hcl.matrimony.entity.PersonDetails;
+import com.hcl.matrimony.entity.StatusDetails;
 import com.hcl.matrimony.entity.User;
 import com.hcl.matrimony.repository.PersonDetailsReposioty;
+import com.hcl.matrimony.repository.StatusDetailsRepository;
 import com.hcl.matrimony.repository.UserRepository;
 import com.hcl.matrimony.util.MatrimonyServiceException;
 
@@ -33,6 +37,9 @@ public class MatrimonyServiceImpl implements MatrimonyService {
 
 	@Autowired
 	UserRepository userRepository;
+
+	@Autowired
+	StatusDetailsRepository statusDetailsRepository;
 
 	@Override
 	public ApiResponse registerAccount(PersonDetailsRequest request) {
@@ -87,22 +94,22 @@ public class MatrimonyServiceImpl implements MatrimonyService {
 
 		return response;
 	}
-	
+
 	@Override
 	public ProfileListResponse getAllProfiles(String emailId) {
 		logger.info("getAllProfiles is calling ...!");
-		ProfileListResponse response=null;
+		ProfileListResponse response = null;
 		try {
-			if(emailId!=null) {
+			if (emailId != null) {
 				PersonDetails persondetails = personDetailsReposioty.findByEmailId(emailId);
-				List<PersonProfileDto> profileList=new ArrayList<>();
-				if(persondetails!=null) {
-					
-					String gender=persondetails.getGender();
+				List<PersonProfileDto> profileList = new ArrayList<>();
+				if (persondetails != null) {
+
+					String gender = persondetails.getGender();
 					List<PersonDetails> findByGender = personDetailsReposioty.findByGender(gender);
-					if(findByGender!=null && !findByGender.isEmpty()) {
-						findByGender.stream().forEach(person->{
-							PersonProfileDto dto=new PersonProfileDto();
+					if (findByGender != null && !findByGender.isEmpty()) {
+						findByGender.stream().forEach(person -> {
+							PersonProfileDto dto = new PersonProfileDto();
 							dto.setProfileId(person.getProfileId());
 							dto.setLanguage(person.getLanguage());
 							dto.setName(person.getName());
@@ -110,34 +117,34 @@ public class MatrimonyServiceImpl implements MatrimonyService {
 							profileList.add(dto);
 						});
 					}
-					response=new ProfileListResponse();
+					response = new ProfileListResponse();
 					response.setProfilesList(profileList);
 					response.setStatus(SUCCESS);
 					response.setMessage(SUCCESS);
 					response.setStatusCode(200);
-					
-				}else {
+
+				} else {
 					throw new MatrimonyServiceException("Email id is not valid");
 				}
 			}
-			
+
 		} catch (Exception e) {
-			response=new ProfileListResponse();
+			response = new ProfileListResponse();
 			response.setStatus(FAILURE);
 			response.setStatusCode(401);
 			logger.error(e.getClass().getName() + " RegisterAccount " + e.getMessage());
 		}
 		return response;
 	}
-	
+
 	@Override
 	public ApiResponse updatePersonalDetails(UpdatePersonDetailsRequest request) {
-		ApiResponse response=null;
+		ApiResponse response = null;
 		try {
-			if(request!=null) {
+			if (request != null) {
 				Long personId = request.getPersonId();
 				PersonDetails person = personDetailsReposioty.findByProfileId(personId);
-				if(person!=null) {
+				if (person != null) {
 					person.setColour(request.getColour());
 					person.setDob(request.getDob());
 					person.setEmailId(request.getEmailId());
@@ -153,10 +160,10 @@ public class MatrimonyServiceImpl implements MatrimonyService {
 					response.setStatus(SUCCESS);
 					response.setStatusCode(201);
 					response.setMessage("Your details successfully updated ...!");
-				}else {
+				} else {
 					throw new MatrimonyServiceException("Profile not found..!");
 				}
-				
+
 			}
 		} catch (Exception e) {
 			response = new ApiResponse();
@@ -167,8 +174,6 @@ public class MatrimonyServiceImpl implements MatrimonyService {
 		}
 		return response;
 	}
-	
-	
 
 	@Override
 	public ApiResponse login(String emailId, String password) {
@@ -186,16 +191,13 @@ public class MatrimonyServiceImpl implements MatrimonyService {
 				throw new MatrimonyServiceException("UserNotFound Exception");
 
 			}
-			
-			
+
 			Optional<User> user = userRepository.findByEmailIdAndPassword(emailId, password);
 
 			if (!user.isPresent()) {
 
 				throw new MatrimonyServiceException("Invalid credential Exception");
 			}
-
-			
 
 			response.setMessage("Login successfull");
 			response.setStatus(SUCCESS);
@@ -214,4 +216,59 @@ public class MatrimonyServiceImpl implements MatrimonyService {
 		return response;
 	}
 
+	@Override
+	public GetStatusList getStatus(String emailId) {
+		
+		GetStatusList getStatusList=new GetStatusList();
+		   try {
+			
+			   if(emailId!=null) {
+				   
+			PersonDetails deatils=personDetailsReposioty.findByEmailId(emailId);
+			
+			if(deatils.getProfileId()!=null) {
+				
+			List<StatusDetails>	 statusDetails=statusDetailsRepository.getStatusDetails(deatils.getProfileId());  
+			
+		   List<GetStatusResponse> requestStatus=new ArrayList<>();
+		   List<GetStatusResponse> acceptOrRejectStatus=new ArrayList<>();
+
+			
+				if(statusDetails!=null) {
+					
+					for(StatusDetails status:statusDetails) {
+					
+					PersonDetails person	=personDetailsReposioty.findByProfileId(status.getToAccount());
+					
+					if(status.getStatus().equalsIgnoreCase("request")) {
+					GetStatusResponse response=new GetStatusResponse();
+					response.setStatus(status.getStatus());
+					response.setName(person.getName());
+					requestStatus.add(response);
+					
+					}
+					
+					if(status.getStatus().equalsIgnoreCase("accept")) {
+						GetStatusResponse response=new GetStatusResponse();
+						response.setStatus(status.getStatus());
+						response.setName(person.getName());
+						acceptOrRejectStatus.add(response);
+						
+						}		
+					
+				}
+				}
+			}
+			   }
+		   }
+				
+			
+				   
+			   
+		   catch (Exception e) {
+			
+		}
+		
+		return getStatusList;
+	}
 }

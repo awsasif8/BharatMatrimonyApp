@@ -1,6 +1,7 @@
 package com.hcl.matrimony.service;
 
 import com.hcl.matrimony.dto.ApiResponse;
+import com.hcl.matrimony.dto.GetStatusList;
 import com.hcl.matrimony.dto.PersonDetailsRequest;
 import com.hcl.matrimony.dto.ProfileListResponse;
 import com.hcl.matrimony.dto.UpdatePersonDetailsRequest;
@@ -15,5 +16,7 @@ public interface MatrimonyService {
 	public ApiResponse updatePersonalDetails(UpdatePersonDetailsRequest request);
 
 	public ApiResponse login(String emailId, String password);
+
+	public GetStatusList getStatus(String emailId);
 
 }

@@ -48,5 +48,14 @@ public class MatrimonyController {
 		return matrimonyService.login(request.getEmailId(),request.getPassword());	
 		
 	}
+	
+	
+	@GetMapping("/getStatus")
+	public ApiResponse getStatus(@RequestParam String emailId) {
+		
+		return matrimonyService.getStatus(emailId);	
+		
+	}
+
 
 }
