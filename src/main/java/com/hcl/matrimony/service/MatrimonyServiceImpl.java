@@ -1,6 +1,8 @@
 package com.hcl.matrimony.service;
 
 import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -10,6 +12,9 @@ import org.springframework.stereotype.Service;
 
 import com.hcl.matrimony.dto.ApiResponse;
 import com.hcl.matrimony.dto.PersonDetailsRequest;
+import com.hcl.matrimony.dto.PersonProfileDto;
+import com.hcl.matrimony.dto.ProfileListResponse;
+import com.hcl.matrimony.dto.UpdatePersonDetailsRequest;
 import com.hcl.matrimony.entity.PersonDetails;
 import com.hcl.matrimony.entity.User;
 import com.hcl.matrimony.repository.PersonDetailsReposioty;
@@ -82,6 +87,88 @@ public class MatrimonyServiceImpl implements MatrimonyService {
 
 		return response;
 	}
+	
+	@Override
+	public ProfileListResponse getAllProfiles(String emailId) {
+		logger.info("getAllProfiles is calling ...!");
+		ProfileListResponse response=null;
+		try {
+			if(emailId!=null) {
+				PersonDetails persondetails = personDetailsReposioty.findByEmailId(emailId);
+				List<PersonProfileDto> profileList=new ArrayList<>();
+				if(persondetails!=null) {
+					
+					String gender=persondetails.getGender();
+					List<PersonDetails> findByGender = personDetailsReposioty.findByGender(gender);
+					if(findByGender!=null && !findByGender.isEmpty()) {
+						findByGender.stream().forEach(person->{
+							PersonProfileDto dto=new PersonProfileDto();
+							dto.setProfileId(person.getProfileId());
+							dto.setLanguage(person.getLanguage());
+							dto.setName(person.getName());
+							dto.setOccupation(person.getOccupation());
+							profileList.add(dto);
+						});
+					}
+					response=new ProfileListResponse();
+					response.setProfilesList(profileList);
+					response.setStatus(SUCCESS);
+					response.setMessage(SUCCESS);
+					response.setStatusCode(200);
+					
+				}else {
+					throw new MatrimonyServiceException("Email id is not valid");
+				}
+			}
+			
+		} catch (Exception e) {
+			response=new ProfileListResponse();
+			response.setStatus(FAILURE);
+			response.setStatusCode(401);
+			logger.error(e.getClass().getName() + " RegisterAccount " + e.getMessage());
+		}
+		return response;
+	}
+	
+	@Override
+	public ApiResponse updatePersonalDetails(UpdatePersonDetailsRequest request) {
+		ApiResponse response=null;
+		try {
+			if(request!=null) {
+				Long personId = request.getPersonId();
+				PersonDetails person = personDetailsReposioty.findByProfileId(personId);
+				if(person!=null) {
+					person.setColour(request.getColour());
+					person.setDob(request.getDob());
+					person.setEmailId(request.getEmailId());
+					person.setGender(request.getGender());
+					person.setHeight(request.getHeight());
+					person.setLanguage(request.getLanguage());
+					person.setMaritalStatus(request.getMaritalStatus());
+					person.setMobileNo(request.getMobileNo());
+					person.setName(request.getName());
+					person.setOccupation(request.getOccupation());
+					personDetailsReposioty.save(person);
+					response = new ApiResponse();
+					response.setStatus(SUCCESS);
+					response.setStatusCode(201);
+					response.setMessage("Your details successfully updated ...!");
+				}else {
+					throw new MatrimonyServiceException("Profile not found..!");
+				}
+				
+			}
+		} catch (Exception e) {
+			response = new ApiResponse();
+			response.setMessage(e.getMessage());
+			response.setStatus(FAILURE);
+			response.setStatusCode(401);
+			logger.error(e.getClass().getName() + " updatePersonalDetails " + e.getMessage());
+		}
+		return response;
+	}
+	
+	
 
 	@Override
 	public ApiResponse login(String emailId, String password) {
