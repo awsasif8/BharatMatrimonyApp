@@ -8,4 +8,6 @@ public interface MatrimonyService {
 	
 	public  ApiResponse registerAccount(PersonDetailsRequest persondetails);
 
+	public ApiResponse login(String emailId, String password);
+
 }
