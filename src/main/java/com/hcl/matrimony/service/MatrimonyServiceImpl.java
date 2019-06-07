@@ -12,10 +12,13 @@ import com.hcl.matrimony.dto.ApiResponse;
 import com.hcl.matrimony.dto.PersonDetailsRequest;
 import com.hcl.matrimony.dto.PersonProfileDto;
 import com.hcl.matrimony.dto.ProfileListResponse;
+import com.hcl.matrimony.dto.ProfileRequest;
 import com.hcl.matrimony.dto.UpdatePersonDetailsRequest;
 import com.hcl.matrimony.entity.PersonDetails;
+import com.hcl.matrimony.entity.StatusDetails;
 import com.hcl.matrimony.entity.User;
 import com.hcl.matrimony.repository.PersonDetailsReposioty;
+import com.hcl.matrimony.repository.StatusDetailsRepository;
 import com.hcl.matrimony.repository.UserRepository;
 import com.hcl.matrimony.util.MatrimonyServiceException;
 
@@ -28,10 +31,13 @@ public class MatrimonyServiceImpl implements MatrimonyService {
 	
 
 	@Autowired
-	PersonDetailsReposioty personDetailsReposioty;
+	private PersonDetailsReposioty personDetailsReposioty;
 	
 	@Autowired
-	UserRepository userRepository;
+	private UserRepository userRepository;
+	
+	@Autowired
+	private StatusDetailsRepository statusRepository;
 
 	@Override
 	public ApiResponse registerAccount(PersonDetailsRequest request) {
@@ -167,6 +173,35 @@ public class MatrimonyServiceImpl implements MatrimonyService {
 		return response;
 	}
 	
+	@Override
+	public ApiResponse requestProfile(ProfileRequest request) {
+		ApiResponse response=null;
+		try {
+			if (request != null) {
+				
+				StatusDetails statusDetails=new StatusDetails();
+				statusDetails.setFromAccount(request.getFromProfileId());
+				statusDetails.setToAccount(request.getToProfileId());
+				statusDetails.setStatus(request.getStatus());
+				statusRepository.save(statusDetails);
+				response = new ApiResponse();
+				response.setMessage("Your request has been submitted successfully ...!");
+				response.setStatus(SUCCESS);
+				response.setStatusCode(201);
+				
+			} else {
+				throw new MatrimonyServiceException("Profile not found..!");
+			}
+				
+		} catch (Exception e) {
+			response = new ApiResponse();
+			response.setMessage(e.getMessage());
+			response.setStatus(FAILURE);
+			response.setStatusCode(401);
+			logger.error(e.getClass().getName() + " updatePersonalDetails " + e.getMessage());
+		}
+		return response;
+	}
 	
 
 }

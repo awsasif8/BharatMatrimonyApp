@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.hcl.matrimony.dto.ApiResponse;
 import com.hcl.matrimony.dto.PersonDetailsRequest;
 import com.hcl.matrimony.dto.ProfileListResponse;
+import com.hcl.matrimony.dto.ProfileRequest;
 import com.hcl.matrimony.dto.UpdatePersonDetailsRequest;
 import com.hcl.matrimony.service.MatrimonyService;
 
@@ -38,6 +39,11 @@ public class MatrimonyController {
 	@PostMapping("/updateAccount")
 	public ApiResponse updateAccount(@RequestBody UpdatePersonDetailsRequest resuest) {
 		return matrimonyService.updatePersonalDetails(resuest);
+	}
+	
+	@PostMapping("/requestProfile")
+	public ApiResponse requestProfile(@RequestBody ProfileRequest resuest) {
+		return matrimonyService.requestProfile(resuest);
 	}
 
 }

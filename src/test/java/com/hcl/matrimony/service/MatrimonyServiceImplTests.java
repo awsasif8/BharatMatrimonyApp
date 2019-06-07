@@ -19,9 +19,11 @@ import com.hcl.matrimony.dto.ApiResponse;
 import com.hcl.matrimony.dto.PersonDetailsRequest;
 import com.hcl.matrimony.dto.PersonProfileDto;
 import com.hcl.matrimony.dto.ProfileListResponse;
+import com.hcl.matrimony.dto.ProfileRequest;
 import com.hcl.matrimony.dto.UpdatePersonDetailsRequest;
 import com.hcl.matrimony.entity.PersonDetails;
 import com.hcl.matrimony.repository.PersonDetailsReposioty;
+import com.hcl.matrimony.repository.StatusDetailsRepository;
 import com.hcl.matrimony.repository.UserRepository;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -32,6 +34,9 @@ public class MatrimonyServiceImplTests {
 	
 	@Mock
 	UserRepository userRepository;
+	
+	@Mock
+	StatusDetailsRepository statusRepository;
 	
 	@InjectMocks
 	MatrimonyServiceImpl matrimonyServiceImpl;
@@ -146,8 +151,25 @@ public class MatrimonyServiceImplTests {
 		
 	}
 	
-	
-	
+	@Test
+	public void requestProfileTest() {
+		
+		ProfileRequest request=new ProfileRequest();
+		request.setFromProfileId(1L);
+		request.setToProfileId(2L);
+		request.setStatus("Requested");
+		ApiResponse response = matrimonyServiceImpl.requestProfile(request);
+		String actual="SUCCESS";
+		String expected=response.getStatus();
+		Double act=Double.valueOf(""+response.getStatusCode());
+		Double exp=201.0;
+		assertEquals(actual, expected);
+		
+		assertEquals(act, exp);
+		
+		
+		
+	}
 	
 	
 
