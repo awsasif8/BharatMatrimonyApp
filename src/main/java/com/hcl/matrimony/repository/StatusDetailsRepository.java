@@ -7,5 +7,10 @@ import com.hcl.matrimony.entity.StatusDetails;
 
 @Repository
 public interface StatusDetailsRepository extends JpaRepository<StatusDetails, Long> {
+	
+	
+	public StatusDetails findByFromAccountAndToAccount(Long fromAccount,Long toAccount);
+	
+	
 
 }
