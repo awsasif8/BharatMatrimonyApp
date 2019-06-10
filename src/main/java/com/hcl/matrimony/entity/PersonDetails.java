@@ -9,8 +9,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "person_details")
@@ -64,6 +62,7 @@ public class PersonDetails implements Serializable {
 		this.profileId = profileId;
 	}
 
+
 	public String getName() {
 		return name;
 	}
@@ -107,6 +106,7 @@ public class PersonDetails implements Serializable {
 	public String getLanguage() {
 		return language;
 	}
+
 
 	public void setLanguage(String language) {
 		this.language = language;
