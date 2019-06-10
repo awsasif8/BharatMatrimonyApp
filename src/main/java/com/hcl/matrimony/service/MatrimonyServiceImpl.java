@@ -51,7 +51,7 @@ public class MatrimonyServiceImpl implements MatrimonyService {
 
 				PersonDetails persondetails = personDetailsReposioty.findByEmailId(request.getEmailId());
 
-				if (persondetails.getEmailId() != null) {
+				if (persondetails !=null && persondetails.getEmailId() != null) {
 					throw new MatrimonyServiceException("Email id is already exist");
 
 				}
@@ -180,6 +180,8 @@ public class MatrimonyServiceImpl implements MatrimonyService {
 		try {
 			if (request != null) {
 				
+				
+				
 				StatusDetails statusDetails=new StatusDetails();
 				statusDetails.setFromAccount(request.getFromProfileId());
 				statusDetails.setToAccount(request.getToProfileId());
@@ -248,5 +250,49 @@ public class MatrimonyServiceImpl implements MatrimonyService {
 
 		return response;
 	}
+	
+	
+	@Override
+	public ApiResponse acceptRejectProfile(ProfileRequest request) {
+		ApiResponse response=null;
+		try {
+			if (request != null) {
+				
+				
+				StatusDetails statusDetails = statusRepository.findByFromAccountAndToAccount(request.getToProfileId(), request.getFromProfileId());
+				if(statusDetails!=null) {
+					statusDetails.setFromAccount(request.getToProfileId());
+					statusDetails.setToAccount(request.getFromProfileId());
+					statusDetails.setStatus(request.getStatus());
+					statusRepository.save(statusDetails);
+					response = new ApiResponse();
+					if(request.getStatus()!=null && request.getStatus().equalsIgnoreCase("accepted")) {
+						response.setMessage("Your request has been accepted successfully ...!");
+					}else if(request.getStatus()!=null && request.getStatus().equalsIgnoreCase("rejected"))  {
+						response.setMessage("Your request has been rejected successfully ...!");
+					}else {
+						response.setMessage("Your request has been updated successfully ...!");
+					}
+					
+					response.setStatus(SUCCESS);
+					response.setStatusCode(201);
+				}
+				
+			} else {
+				throw new MatrimonyServiceException("Profile not found..!");
+			}
+				
+		} catch (Exception e) {
+			response = new ApiResponse();
+			response.setMessage(e.getMessage());
+			response.setStatus(FAILURE);
+			response.setStatusCode(401);
+			logger.error(e.getClass().getName() + " updatePersonalDetails " + e.getMessage());
+		}
+		return response;
+	}
+	
+
+	
 
 }

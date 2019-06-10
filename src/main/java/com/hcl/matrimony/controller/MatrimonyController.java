@@ -67,5 +67,10 @@ public class MatrimonyController {
 		return matrimonyService.login(request.getEmailId(),request.getPassword());	
 		
 	}
+	
+	@PostMapping("/acceptRejectProfile")
+	public ApiResponse acceptReject(@RequestBody ProfileRequest resuest) {
+		return matrimonyService.acceptRejectProfile(resuest);
+	}	
 
 }

@@ -22,6 +22,7 @@ import com.hcl.matrimony.dto.ProfileListResponse;
 import com.hcl.matrimony.dto.ProfileRequest;
 import com.hcl.matrimony.dto.UpdatePersonDetailsRequest;
 import com.hcl.matrimony.entity.PersonDetails;
+import com.hcl.matrimony.entity.StatusDetails;
 import com.hcl.matrimony.repository.PersonDetailsReposioty;
 import com.hcl.matrimony.repository.StatusDetailsRepository;
 import com.hcl.matrimony.repository.UserRepository;
@@ -153,6 +154,35 @@ public class MatrimonyServiceImplTests {
 		request.setToProfileId(2L);
 		request.setStatus("Requested");
 		ApiResponse response = matrimonyServiceImpl.requestProfile(request);
+		String actual="SUCCESS";
+		String expected=response.getStatus();
+		Double act=Double.valueOf(""+response.getStatusCode());
+		Double exp=201.0;
+		assertEquals(actual, expected);
+		
+		assertEquals(act, exp);
+		
+		
+		
+	}
+	
+	
+	@Test
+	public void acceptRejectProfile() {
+		
+		ProfileRequest request=new ProfileRequest();
+		request.setFromProfileId(2L);
+		request.setToProfileId(1L);
+		request.setStatus("Accepted");
+		StatusDetails status=new StatusDetails();
+		status.setStatusId(1L);
+		status.setFromAccount(2L);
+		status.setToAccount(1L);
+		status.setStatus("accepted");
+		
+		when(statusRepository.findByFromAccountAndToAccount(1L, 2L)).thenReturn(status);
+		
+		ApiResponse response = matrimonyServiceImpl.acceptRejectProfile(request);
 		String actual="SUCCESS";
 		String expected=response.getStatus();
 		Double act=Double.valueOf(""+response.getStatusCode());
