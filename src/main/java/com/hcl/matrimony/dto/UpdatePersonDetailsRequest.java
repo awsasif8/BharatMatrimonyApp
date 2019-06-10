@@ -7,7 +7,7 @@ public class UpdatePersonDetailsRequest implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 	
-	private Long personId;
+	private Long profileId;
 	private String name;
 	private String emailId;
 	private Date dob;
@@ -18,7 +18,6 @@ public class UpdatePersonDetailsRequest implements Serializable{
 	private String occupation;
 	private String gender;
 	private String colour;
-    private String password;
 	
 	public String getName() {
 		return name;
@@ -80,17 +79,12 @@ public class UpdatePersonDetailsRequest implements Serializable{
 	public void setColour(String colour) {
 		this.colour = colour;
 	}
-	public String getPassword() {
-		return password;
+	
+	public Long getProfileId() {
+		return profileId;
 	}
-	public void setPassword(String password) {
-		this.password = password;
-	}
-	public Long getPersonId() {
-		return personId;
-	}
-	public void setPersonId(Long personId) {
-		this.personId = personId;
+	public void setProfileId(Long personId) {
+		this.profileId = personId;
 	}
     
     

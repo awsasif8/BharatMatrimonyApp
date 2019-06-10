@@ -143,7 +143,7 @@ public class MatrimonyServiceImpl implements MatrimonyService {
 		ApiResponse response = null;
 		try {
 			if (request != null) {
-				Long personId = request.getPersonId();
+				Long personId = request.getProfileId();
 				PersonDetails person = personDetailsReposioty.findByProfileId(personId);
 				if (person != null) {
 					person.setColour(request.getColour());
