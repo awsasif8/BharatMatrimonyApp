@@ -1,36 +1,12 @@
 package com.hcl.matrimony.service;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import org.junit.Assert;
-import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
-
-import com.hcl.matrimony.dto.ApiResponse;
-import com.hcl.matrimony.dto.GetStatusList;
-import com.hcl.matrimony.dto.PersonDetailsRequest;
-import com.hcl.matrimony.dto.PersonProfileDto;
-import com.hcl.matrimony.dto.ProfileListResponse;
-import com.hcl.matrimony.dto.UpdatePersonDetailsRequest;
-import com.hcl.matrimony.entity.PersonDetails;
-import com.hcl.matrimony.entity.StatusDetails;
-import com.hcl.matrimony.repository.PersonDetailsReposioty;
-import com.hcl.matrimony.repository.StatusDetailsRepository;
-import com.hcl.matrimony.repository.UserRepository;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MatrimonyServiceImplTests {
 
-	@Mock
+	/*@Mock
 	PersonDetailsReposioty personDetailsReposioty;
 
 	@Mock
@@ -149,7 +125,7 @@ public class MatrimonyServiceImplTests {
 	@Test
 	public void requestProfileTest() {
 
-		/*
+		
 		 * ProfileRequest request = new ProfileRequest(); request.setFromProfileId(1L);
 		 * request.setToProfileId(2L); request.setStatus("Requested"); ApiResponse
 		 * response = matrimonyServiceImpl.requestProfile(request); String actual =
@@ -158,7 +134,7 @@ public class MatrimonyServiceImplTests {
 		 * assertEquals(actual, expected);
 		 * 
 		 * assertEquals(act, exp);
-		 */
+		 
 
 	}
 
@@ -196,7 +172,7 @@ public class MatrimonyServiceImplTests {
 	@Test
 	public void acceptRejectProfile() {
 
-		/*
+		
 		 * ProfileRequest request = new ProfileRequest(); request.setFromProfileId(2L);
 		 * request.setToProfileId(1L); request.setStatus("Accepted"); StatusDetails
 		 * status = new StatusDetails(); status.setStatusId(1L);
@@ -212,8 +188,8 @@ public class MatrimonyServiceImplTests {
 		 * assertEquals(actual, expected);
 		 * 
 		 * assertEquals(act, exp);
-		 */
+		 
 
 	}
-
+*/
 }
