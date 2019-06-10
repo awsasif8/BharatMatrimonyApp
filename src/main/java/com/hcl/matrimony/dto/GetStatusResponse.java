@@ -8,6 +8,7 @@ public class GetStatusResponse implements Serializable {
 
 	private String status;
 	private String name;
+	private Long profileId;
 
 	public String getStatus() {
 		return status;
@@ -24,5 +25,15 @@ public class GetStatusResponse implements Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+	public Long getProfileId() {
+		return profileId;
+	}
+
+	public void setProfileId(Long profileId) {
+		this.profileId = profileId;
+	}
+	
+	
 
 }
