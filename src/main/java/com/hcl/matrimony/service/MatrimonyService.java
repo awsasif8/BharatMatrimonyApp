@@ -19,6 +19,8 @@ public interface MatrimonyService {
 	public ApiResponse requestProfile(ProfileRequest request);
 
 	public ApiResponse login(String emailId, String password);
+	
+	public ApiResponse acceptRejectProfile(ProfileRequest request);
 
 	public GetStatusList getStatus(String emailId);
 

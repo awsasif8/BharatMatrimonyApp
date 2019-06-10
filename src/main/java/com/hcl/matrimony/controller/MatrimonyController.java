@@ -25,56 +25,59 @@ import com.hcl.matrimony.service.PersonService;
 @RequestMapping("/matrimony")
 @CrossOrigin
 public class MatrimonyController {
-	
+
 	@Autowired
 	private PersonService personService;
 	@Autowired
 	private MatrimonyService matrimonyService;
-	
+
 	@GetMapping("/getMyProfile/{emailId}")
-	public ProfileResponse findMyProfileByEmailId(@PathVariable String emailId){
+	public ProfileResponse findMyProfileByEmailId(@PathVariable String emailId) {
 		return personService.findMyProfileByEmailId(emailId);
 	}
-	
+
 	@GetMapping("/getProfileDetails/{profileId}")
-	 public ResponseDTO findProfileDetailsById(@PathVariable Long profileId) {
-		 return personService.findProfileDetails(profileId);
-	 }
-	
+	public ResponseDTO findProfileDetailsById(@PathVariable Long profileId) {
+		return personService.findProfileDetails(profileId);
+	}
+
 	@PostMapping("/registerAccount")
 	public ApiResponse registerAccount(@RequestBody PersonDetailsRequest resuest) {
 		return matrimonyService.registerAccount(resuest);
 	}
-	
+
 	@GetMapping("/getAllProfiles")
 	public ProfileListResponse getAllProfiles(@RequestParam("emailId") String emailId) {
 		return matrimonyService.getAllProfiles(emailId);
 	}
-	
+
 	@PostMapping("/updateAccount")
 	public ApiResponse updateAccount(@RequestBody UpdatePersonDetailsRequest resuest) {
 		return matrimonyService.updatePersonalDetails(resuest);
 	}
-	
+
 	@PostMapping("/requestProfile")
 	public ApiResponse requestProfile(@RequestBody ProfileRequest resuest) {
 		return matrimonyService.requestProfile(resuest);
-	}	
-	
-	@PostMapping("/login")
-	public ApiResponse login(@RequestBody LoginRequest request) {
-		
-		return matrimonyService.login(request.getEmailId(),request.getPassword());	
-		
-	}
-	
-	
-	@GetMapping("/viewStatus")
-	public ApiResponse viewStatus(@RequestParam String emailId) {
-		
-		return matrimonyService.getStatus(emailId);	
-		
 	}
 
+	@PostMapping("/login")
+	public ApiResponse login(@RequestBody LoginRequest request) {
+
+		return matrimonyService.login(request.getEmailId(), request.getPassword());
+
+	}
+
+	@GetMapping("/viewStatus")
+	public ApiResponse viewStatus(@RequestParam String emailId) {
+
+		return matrimonyService.getStatus(emailId);
+
+	}
+
+	@PostMapping("/acceptRejectProfile")
+	public ApiResponse acceptReject(@RequestBody ProfileRequest resuest) {
+		return matrimonyService.acceptRejectProfile(resuest);
+	}
 
 }

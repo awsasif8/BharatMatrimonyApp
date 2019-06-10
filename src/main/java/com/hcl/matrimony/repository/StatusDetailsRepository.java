@@ -9,10 +9,11 @@ import com.hcl.matrimony.entity.StatusDetails;
 
 @Repository
 public interface StatusDetailsRepository extends JpaRepository<StatusDetails, Long> {
-	
-	    List<StatusDetails> findByFromAccount(Long fromAccount);
-	    
-	    List<StatusDetails> findByToAccount(Long toAccount);
-		   
+
+	public List<StatusDetails> findByFromAccount(Long fromAccount);
+
+	public List<StatusDetails> findByToAccount(Long toAccount);
+
+	public StatusDetails findByFromAccountAndToAccount(Long fromAccount, Long toAccount);
 
 }

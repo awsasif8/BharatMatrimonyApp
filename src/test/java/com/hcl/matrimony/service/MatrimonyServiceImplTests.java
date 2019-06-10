@@ -39,7 +39,7 @@ public class MatrimonyServiceImplTests {
 
 	@Mock
 	StatusDetailsRepository statusRepository;
-	
+
 	@InjectMocks
 	MatrimonyServiceImpl matrimonyServiceImpl;
 
@@ -76,12 +76,12 @@ public class MatrimonyServiceImplTests {
 		ApiResponse response = new ApiResponse();
 		response.setStatus("SUCCESS");
 		response.setStatusCode(200);
-		response.setMessage("Register successfully");		
-		
-		ApiResponse actual=matrimonyServiceImpl.registerAccount(request);
-		
-		Assert.assertEquals(response.toString(),actual.toString());
-		
+		response.setMessage("Register successfully");
+
+		ApiResponse actual = matrimonyServiceImpl.registerAccount(request);
+
+		Assert.assertEquals(response.toString(), actual.toString());
+
 	}
 
 	@Test
@@ -146,43 +146,38 @@ public class MatrimonyServiceImplTests {
 		assertEquals(exp, actual);
 
 	}
-	
+
 	@Test
 	public void requestProfileTest() {
-		
-		ProfileRequest request=new ProfileRequest();
+
+		ProfileRequest request = new ProfileRequest();
 		request.setFromProfileId(1L);
 		request.setToProfileId(2L);
 		request.setStatus("Requested");
 		ApiResponse response = matrimonyServiceImpl.requestProfile(request);
-		String actual="SUCCESS";
-		String expected=response.getStatus();
-		Double act=Double.valueOf(""+response.getStatusCode());
-		Double exp=201.0;
+		String actual = "SUCCESS";
+		String expected = response.getStatus();
+		Double act = Double.valueOf("" + response.getStatusCode());
+		Double exp = 201.0;
 		assertEquals(actual, expected);
-		
+
 		assertEquals(act, exp);
-		
-		
-		
+
 	}
-	
-	
+
 	@Test
 	public void testGetStatus() {
-		
-		
-		StatusDetails details=new StatusDetails();
-		
 
-		List<StatusDetails> detailsList=new ArrayList<StatusDetails>();
-		
+		StatusDetails details = new StatusDetails();
+
+		List<StatusDetails> detailsList = new ArrayList<StatusDetails>();
+
 		details.setFromAccount(1L);
 		details.setStatus("request");
 		details.setStatusId(1L);
 		details.setToAccount(2L);
-		
-		PersonDetails person=new PersonDetails();
+
+		PersonDetails person = new PersonDetails();
 		person.setProfileId(1L);
 		person.setEmailId("sahi@gmail.com");
 		person.setColour("fair");
@@ -190,17 +185,41 @@ public class MatrimonyServiceImplTests {
 		person.setGender("male");
 		person.setHeight(12F);
 		person.setLanguage("kannada");
-		
+
 		Mockito.when(personDetailsReposioty.findByEmailId("sahi@gmail.com")).thenReturn(person);
 		Mockito.when(statusRepository.findByToAccount(1L)).thenReturn(detailsList);
 		Mockito.when(personDetailsReposioty.findByProfileId(1L)).thenReturn(person);
-		GetStatusList response=matrimonyServiceImpl.getStatus("sahi@gmail.com");
-		
-		Integer value= new Integer(200);
-		
+		GetStatusList response = matrimonyServiceImpl.getStatus("sahi@gmail.com");
+
+		Integer value = new Integer(200);
+
 		Assert.assertEquals(value, response.getStatusCode());
-		
 	}
-	
-	
+
+	@Test
+	public void acceptRejectProfile() {
+
+		ProfileRequest request = new ProfileRequest();
+		request.setFromProfileId(2L);
+		request.setToProfileId(1L);
+		request.setStatus("Accepted");
+		StatusDetails status = new StatusDetails();
+		status.setStatusId(1L);
+		status.setFromAccount(2L);
+		status.setToAccount(1L);
+		status.setStatus("accepted");
+
+		when(statusRepository.findByFromAccountAndToAccount(1L, 2L)).thenReturn(status);
+
+		ApiResponse response = matrimonyServiceImpl.acceptRejectProfile(request);
+		String actual = "SUCCESS";
+		String expected = response.getStatus();
+		Double act = Double.valueOf("" + response.getStatusCode());
+		Double exp = 201.0;
+		assertEquals(actual, expected);
+
+		assertEquals(act, exp);
+
+	}
+
 }
