@@ -51,7 +51,7 @@ public class MatrimonyServiceImpl implements MatrimonyService {
 
 				PersonDetails persondetails = personDetailsReposioty.findByEmailId(request.getEmailId());
 
-				if (persondetails !=null && persondetails.getEmailId() != null) {
+				if (persondetails!=null && persondetails.getEmailId() != null) {
 					throw new MatrimonyServiceException("Email id is already exist");
 
 				}
