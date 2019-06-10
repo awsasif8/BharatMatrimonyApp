@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hcl.matrimony.dto.ApiResponse;
+import com.hcl.matrimony.dto.GetStatusList;
 import com.hcl.matrimony.dto.LoginRequest;
 import com.hcl.matrimony.dto.PersonDetailsRequest;
 import com.hcl.matrimony.dto.ProfileListResponse;
@@ -69,7 +70,7 @@ public class MatrimonyController {
 	}
 
 	@GetMapping("/viewStatus")
-	public ApiResponse viewStatus(@RequestParam String emailId) {
+	public GetStatusList viewStatus(@RequestParam String emailId) {
 
 		return matrimonyService.getStatus(emailId);
 
