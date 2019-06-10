@@ -319,6 +319,7 @@ public class MatrimonyServiceImpl implements MatrimonyService {
 								GetStatusResponse response = new GetStatusResponse();
 								response.setStatus(status.getStatus());
 								response.setName(person.getName());
+								response.setProfileId(person.getProfileId());
 								requestStatus.add(response);
 
 							}
@@ -327,6 +328,7 @@ public class MatrimonyServiceImpl implements MatrimonyService {
 								GetStatusResponse response = new GetStatusResponse();
 								response.setStatus(status.getStatus());
 								response.setName(person.getName());
+								response.setProfileId(person.getProfileId());
 								acceptOrRejectStatus.add(response);
 
 							}
