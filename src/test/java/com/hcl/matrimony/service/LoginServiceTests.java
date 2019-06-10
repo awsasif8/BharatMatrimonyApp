@@ -2,13 +2,9 @@ package com.hcl.matrimony.service;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import com.hcl.matrimony.repository.UserRepository;
-
-@RunWith(MockitoJUnitRunner.class)
+//@RunWith(MockitoJUnitRunner.class)
 public class LoginServiceTests {
 
 	/*@Mock
@@ -18,8 +14,8 @@ public class LoginServiceTests {
 	MatrimonyServiceImpl matrimonyServiceImpl;
 */
 	
-	@Test
-	public void testLogin() {
+	//@Test
+	//public void testLogin() {
 
 		/*LoginRequest request = new LoginRequest();
 		request.setEmailId("suma@gmail.com");
