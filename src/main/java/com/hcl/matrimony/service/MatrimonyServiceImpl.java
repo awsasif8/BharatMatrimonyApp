@@ -143,7 +143,7 @@ public class MatrimonyServiceImpl implements MatrimonyService {
 		ApiResponse response = null;
 		try {
 			if (request != null) {
-				Long personId = request.getPersonId();
+				Long personId = request.getProfileId();
 				PersonDetails person = personDetailsReposioty.findByProfileId(personId);
 				if (person != null) {
 					person.setColour(request.getColour());
@@ -182,17 +182,24 @@ public class MatrimonyServiceImpl implements MatrimonyService {
 		try {
 			if (request != null) {
 
-				StatusDetails statusDetails = new StatusDetails();
 				
-				statusDetails.setFromAccount(request.getFromProfileId());
-				statusDetails.setToAccount(request.getToProfileId());
-				statusDetails.setStatus(request.getStatus());
-				statusRepository.save(statusDetails);
-				response = new ApiResponse();
-				response.setMessage("Your request has been submitted successfully ...!");
-				response.setStatus(SUCCESS);
-				response.setStatusCode(201);
-
+				PersonDetails details = personDetailsReposioty.findByEmailId(request.getEmailId());
+				if(details!=null) {
+					StatusDetails statusDetails = new StatusDetails();
+					
+					statusDetails.setFromAccount(details.getProfileId());
+					statusDetails.setToAccount(request.getToProfileId());
+					statusDetails.setStatus(request.getStatus());
+					statusRepository.save(statusDetails);
+					
+					response = new ApiResponse();
+					response.setMessage("Your request has been submitted successfully ...!");
+					response.setStatus(SUCCESS);
+					response.setStatusCode(201);
+				}else {
+					throw new MatrimonyServiceException("Profile not found..!");
+				}
+				
 			} else {
 				throw new MatrimonyServiceException("Profile not found..!");
 			}
@@ -255,24 +262,28 @@ public class MatrimonyServiceImpl implements MatrimonyService {
 		try {
 			if (request != null) {
 				
-				
-				StatusDetails statusDetails = statusRepository.findByFromAccountAndToAccount(request.getToProfileId(), request.getFromProfileId());
-				if(statusDetails!=null) {
-					statusDetails.setFromAccount(request.getToProfileId());
-					statusDetails.setToAccount(request.getFromProfileId());
-					statusDetails.setStatus(request.getStatus());
-					statusRepository.save(statusDetails);
-					response = new ApiResponse();
-					if(request.getStatus()!=null && request.getStatus().equalsIgnoreCase("accepted")) {
-						response.setMessage("Your request has been accepted successfully ...!");
-					}else if(request.getStatus()!=null && request.getStatus().equalsIgnoreCase("rejected"))  {
-						response.setMessage("Your request has been rejected successfully ...!");
-					}else {
-						response.setMessage("Your request has been updated successfully ...!");
+				PersonDetails details = personDetailsReposioty.findByEmailId(request.getEmailId());
+				if(details!=null) {
+					StatusDetails statusDetails = statusRepository.findByFromAccountAndToAccount(request.getToProfileId(), details.getProfileId());
+					if(statusDetails!=null) {
+						statusDetails.setFromAccount(request.getToProfileId());
+						statusDetails.setToAccount(details.getProfileId());
+						statusDetails.setStatus(request.getStatus());
+						statusRepository.save(statusDetails);
+						response = new ApiResponse();
+						if(request.getStatus()!=null && request.getStatus().equalsIgnoreCase("accept")) {
+							response.setMessage("Your request has been accepted successfully ...!");
+						}else if(request.getStatus()!=null && request.getStatus().equalsIgnoreCase("reject"))  {
+							response.setMessage("Your request has been rejected successfully ...!");
+						}else {
+							response.setMessage("Your request has been updated successfully ...!");
+						}
+						
+						response.setStatus(SUCCESS);
+						response.setStatusCode(201);
 					}
-					
-					response.setStatus(SUCCESS);
-					response.setStatusCode(201);
+				}else {
+					throw new MatrimonyServiceException("Profile not found..!");
 				}
 				
 			} else {
@@ -325,6 +336,14 @@ public class MatrimonyServiceImpl implements MatrimonyService {
 							}
 
 							if (status.getStatus().equalsIgnoreCase("accept")) {
+								GetStatusResponse response = new GetStatusResponse();
+								response.setStatus(status.getStatus());
+								response.setName(person.getName());
+								response.setProfileId(person.getProfileId());
+								acceptOrRejectStatus.add(response);
+
+							}
+							if (status.getStatus().equalsIgnoreCase("reject")) {
 								GetStatusResponse response = new GetStatusResponse();
 								response.setStatus(status.getStatus());
 								response.setName(person.getName());

@@ -6,7 +6,7 @@ public class ProfileRequest implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	private Long fromProfileId;
+	private String emailId;
 	
 	private Long toProfileId;
 	
@@ -16,13 +16,19 @@ public class ProfileRequest implements Serializable {
 		super();
 	}
 
-	public Long getFromProfileId() {
-		return fromProfileId;
+	
+
+	public String getEmailId() {
+		return emailId;
 	}
 
-	public void setFromProfileId(Long fromProfileId) {
-		this.fromProfileId = fromProfileId;
+
+
+	public void setEmailId(String emailId) {
+		this.emailId = emailId;
 	}
+
+
 
 	public Long getToProfileId() {
 		return toProfileId;
